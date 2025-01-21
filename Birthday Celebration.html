@@ -3,82 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Countdown</title>
+    <title>Countdown</title>
     <style>
-        /* Set height and margin to ensure full-screen background */
-        html, body {
-            height: 100%;
+        /* Ensure the background image is displayed correctly */
+        body {
             margin: 0;
             padding: 0;
-        }
-
-        body {
-            background-image: url('picture.jpg');
-            background-size: cover; /* Ensure image covers the full screen */
-            background-position: center; /* Center the image */
-            background-repeat: no-repeat; /* Prevent the image from repeating */
-            background-attachment: fixed; /* Make the background image fixed on scroll */
-            display: flex;
-            justify-content: center;
+            background-image: url('picture.jpg'); /* Use the correct relative path */
+            background-size: cover; /* Ensures the image covers the full screen */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents tiling */
+            height: 100vh; /* Ensures full height */
+            color: white; /* Makes text visible over the image */
+            display: flex; /* Centers content vertically and horizontally */
             align-items: center;
-            color: white;
+            justify-content: center;
             font-family: Arial, sans-serif;
-            overflow: hidden; /* Prevent scrolling */
-        }
-
-        /* Container for the countdown */
-        .countdown-container {
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for readability */
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            max-width: 90%;
-            width: auto;
-        }
-
-        /* Countdown timer style */
-        .countdown {
-            font-size: 50px;
-            font-weight: bold;
-        }
-
-        .label {
-            font-size: 20px;
+            font-size: 2rem;
         }
     </style>
 </head>
 <body>
-
-    <div class="countdown-container">
-        <div class="countdown" id="countdown"></div>
-        <div class="label">Until your special day!</div>
-    </div>
-
+    <div id="countdown"></div>
     <script>
-        // Set the target date for the countdown (change the date accordingly)
-        const targetDate = new Date("Jan 31, 2025 00:00:00").getTime();
+        // Countdown script
+        function startCountdown() {
+            const targetDate = new Date("2025-02-01T00:00:00"); // Set your target date here
+            const countdownElement = document.getElementById("countdown");
 
-        // Update the countdown every second
-        const interval = setInterval(function() {
-            const now = new Date().getTime();
-            const timeLeft = targetDate - now;
+            function updateCountdown() {
+                const now = new Date();
+                const timeDifference = targetDate - now;
 
-            // Calculate days, hours, minutes, and seconds
-            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                if (timeDifference > 0) {
+                    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
+                    const minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+                    const seconds = Math.floor((timeDifference / 1000) % 60);
 
-            // Display the countdown
-            document.getElementById("countdown").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-
-            // If the countdown reaches zero, display a message
-            if (timeLeft <= 0) {
-                clearInterval(interval);
-                document.getElementById("countdown").innerHTML = "Happy Birthday!";
+                    countdownElement.textContent = 
+                        `${days} Days, ${hours} Hours, ${minutes} Minutes, ${seconds} Seconds`;
+                } else {
+                    countdownElement.textContent = "The countdown is over!";
+                }
             }
-        }, 1000);
-    </script>
 
+            updateCountdown(); // Initial call
+            setInterval(updateCountdown, 1000); // Update every second
+        }
+
+        startCountdown();
+    </script>
 </body>
 </html>
